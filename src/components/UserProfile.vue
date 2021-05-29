@@ -9,22 +9,57 @@
             Admin
         </div>
         <div class="user-profile__follower-count">
-            <strong>Followers: </strong> {{ followers }}
+            <strong>Followers: </strong> 
+            {{ followers }}
         </div>
+        <form class="user-profile__create-twoot" @submit.prevent="createNewTwoot">
+            <label for="newTwoot">
+                <strong>New Twoot:</strong>
+            </label>
+            <textarea name="" id="newTwoot" cols="30" rows='4' v-model="newTwootContent"></textarea>
+            <div class="user-profile__create-twoot-type">
+                <label for="newTwootType">
+                    <strong>Type: </strong>
+                </label>
+                <select name="" id="newTwootType" v-model="selectedTwootType">
+                    <option :value="option.value" v-for="(option, index) in twootTypes" :key="index">
+                        {{option.name}}
+                    </option>
+                </select>
+            </div>
+            <button >
+                Twoot!
+            </button>
+        </form>
     </div>
-    <div class="user-profile__twoots_w" >
-        <div class="user-profile__twoot" v-for="twoot in user.twoots" :key="twoot.id">
-            {{twoot.content}}
-        </div>
+    <div class="user-profile__twoots-wrapper">
+        <TwootItem 
+        v-for="twoot in user.twoots" 
+        :key="twoot.id" 
+        :username="user.username" 
+        :twoot="twoot" 
+        @favourite="toggleFavourite"/>
     </div>
   </div>
 </template>
 
 <script>
+
+import TwootItem from './TwootItem'
+
     export default {
-      name: 'App',
+      name: 'UserProfile',
+      components: {
+          TwootItem
+      },
       data() {
         return {
+            newTwootContent: '',
+            selectedTwootType: 'instant',
+            twootTypes: [
+                {value: 'draft', name: 'Draft'},
+                {value: 'instant', name: 'Instant Twoot'},
+            ],
           followers: 0,
           user: {
             id: 1,
@@ -55,6 +90,18 @@
       methods: {
         followUser() {
           this.followers++
+        },
+        toggleFavourite(id) {
+            console.log(`Favourite Tweet #${id}`);
+        },
+        createNewTwoot() {
+            if (this.newTwootContent && this.selectedTwootType !== 'draft') {
+                this.user.twoots.unshift({
+                    id: this.user.twoots.length + 1,
+                    content: this.newTwootContent 
+                }),
+                this.newTwootContent=""
+            }
         }
       },
       mounted() {
@@ -89,7 +136,14 @@
     margin-right: auto;
     padding: 0 10px;
     font-weight: bold;
+    margin-bottom: 20px;
 }
+
+.user-profile__create-twoot {
+    border-top: 1px solid #DFE3E8;
+    padding-top: 20px;
+}
+
 
 h1 {
     margin: 0;
