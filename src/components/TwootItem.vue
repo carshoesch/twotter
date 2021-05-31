@@ -32,7 +32,7 @@ export default {
 };
 </script>
 
-<style> 
+<style scoped> 
 .twoot-item {
     padding: 20px;
     background-color: #fff;
@@ -44,9 +44,9 @@ export default {
     /* margin: 1rem 0; */
 }
 /* hover funktioniert nicht wie gewollt, deshalb auskommentiert */
-/* 
-.twoot-item :hover {
-    transform: scale(1.1, 1.1);
+
+/* .twoot-item :hover {
+    border: 2px solid black;
 } */
 
 .twoot-item__user {

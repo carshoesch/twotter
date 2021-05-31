@@ -12,11 +12,11 @@
             <strong>Followers: </strong> 
             {{ followers }}
         </div>
-        <form class="user-profile__create-twoot" @submit.prevent="createNewTwoot">
+        <form class="user-profile__create-twoot" @submit.prevent="createNewTwoot" >
             <label for="newTwoot">
-                <strong>New Twoot:</strong>
+                <strong>New Twoot:</strong> {{newTwootCharacterCount}} / 180
             </label>
-            <textarea name="" id="newTwoot" cols="30" rows='4' v-model="newTwootContent"></textarea>
+            <textarea name="" id="newTwoot" cols="30" rows='4' maxlength="181" v-model="newTwootContent" :class="{'zuViel': newTwootCharacterCount > 180}"></textarea>
             <div class="user-profile__create-twoot-type">
                 <label for="newTwootType">
                     <strong>Type: </strong>
@@ -27,7 +27,7 @@
                     </option>
                 </select>
             </div>
-            <button >
+            <button :class="{'button__zuViel': newTwootCharacterCount > 180}" :disabled="newTwootCharacterCount > 180">
                 Twoot!
             </button>
         </form>
@@ -85,6 +85,9 @@ import TwootItem from './TwootItem'
       computed: {
         fullName() {
           return `${this.user.firstName} ${this.user.lastName}`
+        },
+        newTwootCharacterCount () {
+          return this.newTwootContent.length;
         }
       },
       methods: {
@@ -110,7 +113,7 @@ import TwootItem from './TwootItem'
     }
 </script>
 
-<style>
+<style scoped>
 .user-profile {
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -140,8 +143,21 @@ import TwootItem from './TwootItem'
 }
 
 .user-profile__create-twoot {
+    display: flex;
+    flex-direction: column;
     border-top: 1px solid #DFE3E8;
     padding-top: 20px;
+    
+}
+
+.user-profile__create-twoot .zuViel {
+  border: 1px solid red;
+  color: red;
+}
+
+.button__zuViel { 
+  cursor: not-allowed;
+  outline: none !important;
 }
 
 
